@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <random>
+#include <string>
 #include <vector>
 
 #include "libutils/src/CLIParser.hpp"
@@ -45,9 +46,21 @@ bool voidFile(const std::string &filepath, int iterations = 3) {
 int main(int argc, char *argv[]) {
   Random::seed(0);
   CLIParser parser(argc, argv);
+  const std::string VERSION = "1.0";
 
-  if(argc == 1 || parser.hasFlag("-h")){
+  if (argc == 1 || parser.hasFlag("-h")) {
+    print("void, a program that deletes a file in a way it can't be "
+          "recovered.\n");
     print("Usage:\n");
-    print("  ",parser.getArg(0)," -h"," ", "\n");
+    print("  ", parser.getArg(0), " -h", "           print help", "\n");
+    print("  ", parser.getArg(0), " -v", "           print version", "\n");
+    print("  ", parser.getArg(0), " -i <VALUE>", "   iterations, default=3",
+          "\n");
+    return 0;
+  }
+
+  if (parser.hasFlag("-v")) {
+    print("void version ", VERSION, "\n");
+    return 0;
   }
 }

@@ -25,7 +25,7 @@ endif
 all: $(BINDIR)/$(TARGET)
 
 # debug target with symbols and no optimizations
-debug: CXXFLAGS += -g -O0
+debug: CXXFLAGS += -g -O0 -DDEBUG
 debug: clean all
 
 # Link step

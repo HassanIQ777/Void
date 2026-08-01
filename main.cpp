@@ -64,6 +64,11 @@ int main(int argc, char *argv[]) {
     files.push_back(arg);
   }
 
+  if (files.empty()) {
+    print("void: no files to delete");
+    return 1;
+  }
+
   int exitCode = 0;
 
   for (const auto &file : files) {
@@ -71,6 +76,11 @@ int main(int argc, char *argv[]) {
     Log::setLogLevel(Log::LogLevel::Debug);
     Log::debug("void: voiding '", file, "'");
 #endif
+    if (File::isdirectory(file)) {
+      print("void: cannot remove '", file, "': Can't void directories\n");
+      exitCode = 1;
+      continue;
+    }
     if (!File::isfile(file)) {
       print("void: cannot remove '", file, "': No such file\n");
       exitCode = 1;

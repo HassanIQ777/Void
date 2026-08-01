@@ -105,8 +105,7 @@ bool voidFile(const std::string &filepath, int iterations) {
     file.seekg(0, std::ios::end);
     std::streamsize size = file.tellg();
     if (size <= 0)
-      break; // nothing left to shred, stop overwriting — but still fall through
-             // to remove below
+      break; // nothing left to shred
 
     std::vector<char> buffer(size);
     for (auto &byte : buffer) {
@@ -119,12 +118,12 @@ bool voidFile(const std::string &filepath, int iterations) {
     file.close();
   }
 
-  // truncate once, after all overwrite passes are done — not per-pass
+  // truncate after all overwrite passes are done
   {
     std::ofstream truncateFile(filepath, std::ios::out | std::ios::trunc);
   }
 
-  // the part that was missing the whole time: actually unlink it
+  // unlink the file
   if (std::remove(filepath.c_str()) != 0) {
     return false;
   }

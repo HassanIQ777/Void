@@ -1,9 +1,9 @@
+#include <cerrno>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cerrno>
 
 #include "libutils/src/CLIParser.hpp"
 #include "libutils/src/File.hpp"
@@ -64,18 +64,25 @@ int main(int argc, char *argv[]) {
     files.push_back(arg);
   }
 
+  int exitCode = 0;
+
   for (const auto &file : files) {
 #ifdef DEBUG
+    Log::setLogLevel(Log::LogLevel::Debug);
     Log::debug("void: voiding '", file, "'");
 #endif
     if (!File::isfile(file)) {
       print("void: cannot remove '", file, "': No such file\n");
+      exitCode = 1;
       continue;
     }
     if (!voidFile(file, iterations)) {
       print("void: cannot remove '", file, "': ", std::strerror(errno), "\n");
+      exitCode = 1;
     }
   }
+
+  return exitCode;
 }
 
 bool voidFile(const std::string &filepath, int iterations) {

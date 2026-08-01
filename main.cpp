@@ -3,6 +3,12 @@
 #include <random>
 #include <vector>
 
+#include "libutils/src/CLIParser.hpp"
+#include "libutils/src/Random.hpp"
+#include "libutils/src/color.hpp"
+#include "libutils/src/funcs.hpp"
+using funcs::print;
+
 bool voidFile(const std::string &filepath, int iterations = 3) {
   for (int i = 0; i < iterations; i++) {
 
@@ -18,11 +24,9 @@ bool voidFile(const std::string &filepath, int iterations = 3) {
 
     // random data to overwrite the file
     std::vector<char> buffer(size);
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, 255);
+
     for (auto &byte : buffer) {
-      byte = static_cast<char>(dis(gen));
+      byte = static_cast<char>(Random::getint(0, 255));
     }
 
     // overwrite
@@ -38,6 +42,12 @@ bool voidFile(const std::string &filepath, int iterations = 3) {
   return true;
 }
 
-int main() {
-  
+int main(int argc, char *argv[]) {
+  Random::seed(0);
+  CLIParser parser(argc, argv);
+
+  if(argc == 1 || parser.hasFlag("-h")){
+    print("Usage:\n");
+    print("  ",parser.getArg(0)," -h"," ", "\n");
+  }
 }
